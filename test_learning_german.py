@@ -23,7 +23,9 @@ def test_send_a_common_word(mock_create):
     expected_sid = 'SM87105da94bff44b999e4e6eb90d8eb6a'
     mock_create.return_value.sid = expected_sid
 
-    sid = send_message(message)
+    to = "+491112223"
+    from_ = "+493332221"
+    sid = send_message(to, from_, message)
 
     assert mock_create.called is True
     assert sid == expected_sid
@@ -41,7 +43,9 @@ def test_raise_exception_when_cannot_send_a_message(mock_create):
     msg = error_message
     mock_create.side_effect = TwilioRestException(status, uri, msg=error_message)
     with pytest.raises(TwilioRestException):
-        send_message("Wrong message")
+        to = "+491112223"
+        from_ = "+493332221"
+        send_message(to, from_, "Wrong message")
 
 
 @mock.patch('learning_german.client.messages.create')
@@ -55,7 +59,9 @@ def test_log_error_when_cannot_send_a_message(mock_create, caplog):
     msg = error_message
     mock_create.side_effect = TwilioRestException(status, uri, msg=error_message)
 
-    sid = send_message("Wrong message")
+    to = "+491112223"
+    from_ = "+493332221"
+    sid = send_message(to, from_, "Wrong message")
 
     assert sid is None
     assert 'Oh no:' in caplog.text
