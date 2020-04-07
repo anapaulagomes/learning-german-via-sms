@@ -12,17 +12,14 @@ environment = os.getenv("ENVIRONMENT", "dev")
 
 class FakeClient:
     def __init__(self, **kwargs):
-        pass
+        self.messages = self.MessageFactory()
 
-    def _create(**kwargs):
-        Message = namedtuple("Message", ["sid"])
-        message = Message(sid="SM00000da94bff44b999e4e6eb90d8eb6a")
-        return message
-
-    def messages(self):
-        return
-
-    messages.create = _create
+    class MessageFactory:
+        @staticmethod
+        def create(**kwargs):
+            Message = namedtuple("Message", ["sid"])
+            message = Message(sid="SM87105da94bff44b999e4e6eb90d8eb6a")
+            return message
 
 
 if environment == "dev":
