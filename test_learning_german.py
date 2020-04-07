@@ -64,5 +64,31 @@ def test_log_error_when_cannot_send_a_message(mock_create, caplog):
     sid = send_message(to, from_, "Wrong message")
 
     assert sid is None
-    assert 'Oh no:' in caplog.text
+    assert "Oh no:" in caplog.text
     assert error_message in caplog.text
+
+
+def test_send_a_common_word_with_stubs():
+    words_set = [
+        {
+            "rank": 105,
+            "german_word": "wirklich",
+            "english_translation": "real, true, natural",
+            "part_of_speech": "adjective",
+            "url": "http://languagedaily.com/learn-german/vocabulary/common-german-words-3",
+        }
+    ]
+    message = (
+        f"The word of the day is... {words_set[0]['german_word']}"
+        f" ({words_set[0]['part_of_speech']})"
+        f"\n\nMeaning: {words_set[0]['english_translation']}"
+        f"\nMore at: {words_set[0]['url']}"
+    )
+
+    expected_sid = "SM87105da94bff44b999e4e6eb90d8eb6a"
+
+    to = "+491112223"
+    from_ = "+493332221"
+    sid = send_message(to, from_, message)
+
+    assert sid == expected_sid

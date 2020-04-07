@@ -1,11 +1,34 @@
 import json
 import logging
+from collections import namedtuple
+import os
 import random
 from twilio.base.exceptions import TwilioRestException
 from twilio.rest import Client
 
 
-client = Client()
+environment = os.getenv("ENVIRONMENT", "dev")
+
+
+class FakeClient:
+    def __init__(self, **kwargs):
+        pass
+
+    def _create(**kwargs):
+        Message = namedtuple("Message", ["sid"])
+        message = Message(sid="SM00000da94bff44b999e4e6eb90d8eb6a")
+        return message
+
+    def messages(self):
+        return
+
+    messages.create = _create
+
+
+if environment == "dev":
+    client = FakeClient()
+else:
+    client = Client()
 # or
 # account_sid = "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 # auth_token = "your_auth_token"
